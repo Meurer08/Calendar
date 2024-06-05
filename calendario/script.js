@@ -28,11 +28,6 @@ function renderCalendar() {
   const end = new Date(year, month, endDate).getDay()
   const endDatePrev = new Date(year, month, 0).getDate()
 
-  console.log(start)
-  console.log(endDate)
-  console.log(end)
-  console.log(endDatePrev)
-
   let datesHtml = "";
 
   for (let i = start; i > 0; i--) {
@@ -47,9 +42,33 @@ function renderCalendar() {
     datesHtml += `<li ${className}>${i}</li>`
   }
 
+  for(let i = end; i < 6; i++) {
+    datesHtml += `<li class="inactives">${i - end + 1}</li>`
+  }
 
   dates.innerHTML = datesHtml
   header.textContent = `${months[month]} ${year}`
 }
+
+navs.forEach( nav => {
+  nav.addEventListener('click', e =>{
+    const btnId = e.target.id;
+    if (btnId === 'prev' && month === 0) {
+      year--;
+      month = 11
+    } else if (btnId === 'next' && month === 11){
+      year++;
+      month=0
+    } else {
+      month = btnId === 'next' ? month + 1 : month - 1
+    }
+    
+    date = new Date(year, month, new Date().getDate())
+    year = date.getFullYear();
+    month = date.getMonth();
+    
+    renderCalendar()
+  })
+})
 
 renderCalendar()
